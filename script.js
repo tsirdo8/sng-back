@@ -3,8 +3,10 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import carwashRoutes from "./routes/carwashRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 connectDB();
 
 app.use(express.json());
