@@ -11,6 +11,9 @@ connectDB();
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+    "hello world"
+});
 app.use("/api/users", userRoutes);
 app.use("/api/carwashes", carwashRoutes);
 app.use("/api/bookings", bookingRoutes);
