@@ -12,7 +12,7 @@ connectDB();
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    "hello world"
+    res.json({ message: "Hello from backend!" });
 });
 app.use("/api/users", userRoutes);
 app.use("/api/carwashes", carwashRoutes);
