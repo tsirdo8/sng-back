@@ -3,16 +3,7 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// CREATE user
-router.post("/", async (req, res) => {
-  try {
-    const user = new User(req.body);
-    await user.save();
-    res.json(user);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
+
 
 // READ all users
 router.get("/", async (req, res) => {

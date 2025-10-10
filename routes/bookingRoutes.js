@@ -5,17 +5,7 @@ import Carwash from "../models/Carwash.js";
 
 const router = express.Router();
 
-/**
- * CREATE booking
- * Example body:
- * {
- *   "user": "USER_ID",
- *   "carwash": "CARWASH_ID",
- *   "service": "Full Wash",
- *   "date": "2025-10-05",
- *   "time": "14:30"
- * }
- */
+
 router.post("/", async (req, res) => {
   try {
     const { user, carwash } = req.body;
