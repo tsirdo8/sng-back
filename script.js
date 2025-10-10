@@ -6,8 +6,12 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import carwashRoutes from "./routes/carwashRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
+import cors from "cors";
+
 
 dotenv.config();
+const app = express();
+app.use(cors());
 connectDB();
 
 
@@ -16,6 +20,9 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.get("/", (req, res) => {
+    res.json({ message: "Hello from backend!" });
+});
 app.use("/api/users", userRoutes);
 app.use("/api/carwashes", carwashRoutes);
 app.use("/api/bookings", bookingRoutes);
