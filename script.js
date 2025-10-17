@@ -12,7 +12,6 @@ dotenv.config();
 const app = express();
 app.use(cors());
 connectDB().then((res) => {
-  // „const PORT = process.env.PORT || 5000;
   app.listen(3000, () => console.log(`Server running on port 3000`));
 });
 

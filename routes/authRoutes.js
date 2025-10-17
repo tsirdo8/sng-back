@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Carwash from "../models/Carwash.js";
+import passport from "../config/google.strategy.js"
 
 const router = express.Router();
 
@@ -115,5 +116,28 @@ router.post("/signin/carwash", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+
+router.get("/google", passport.authenticate('google', { scope: ['profile', "email"] }))
+
+router.get("/google/callback", passport.authenticate('google',{session: false}), async(req, res) => {
+  console.log("✅ Authenticated user:", req.user);
+   let existUser = await User.findOne({email:req.user.email})
+
+   if(!existUser)
+    existUser = await User.create({
+      name: req.user.fullName,
+      email: req.user.email,
+      avatar: req.user.avatar,
+      role: "customer",
+ password: "google-auth", 
+  phone: "", 
+    });
+
+
+});
+
+
 
 export default router;
