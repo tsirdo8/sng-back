@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Carwash from "../models/Carwash.js";
-import passport from "../config/google.strategy.js"
+import passport from "../config/google.strategy.js";
 
 const router = express.Router();
 
@@ -68,16 +68,17 @@ router.post("/signin/user", async (req, res) => {
 // -------------------- CARWASH SIGNUP --------------------
 router.post("/signup/carwash", async (req, res) => {
   try {
-    const { name, location, services, workingHours, password } = req.body;
+    const { email, name, location, services, workingHours, password } = req.body;
 
     const exists = await Carwash.findOne({ name });
-    if (exists) return res.status(400).json({ error: "Carwash already exists" });
+    if (exists)
+      return res.status(400).json({ error: "Carwash already exists" });
 
-  
     const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
 
     const carwash = await Carwash.create({
       name,
+      email,
       location,
       services,
       workingHours,
@@ -87,6 +88,7 @@ router.post("/signup/carwash", async (req, res) => {
     res.json({
       _id: carwash._id,
       name: carwash.name,
+      email: carwash.email,
       location: carwash.location,
       services: carwash.services,
       token: generateToken(carwash._id, "carwash"),
@@ -117,27 +119,31 @@ router.post("/signin/carwash", async (req, res) => {
   }
 });
 
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { session: false }),
+  async (req, res) => {
+    console.log("Authenticated user:", req.user);
+    let existUser = await User.findOne({ email: req.user.email });
 
-router.get("/google", passport.authenticate('google', { scope: ['profile', "email"] }))
+    if (!existUser)
+      existUser = await User.create({
+        name: req.user.fullName,
+        email: req.user.email,
+        avatar: req.user.avatar,
+        role: "customer",
+        password: "google-auth",
+        phone: "",
+      });
 
-router.get("/google/callback", passport.authenticate('google',{session: false}), async(req, res) => {
-  console.log("✅ Authenticated user:", req.user);
-   let existUser = await User.findOne({email:req.user.email})
-
-   if(!existUser)
-    existUser = await User.create({
-      name: req.user.fullName,
-      email: req.user.email,
-      avatar: req.user.avatar,
-      role: "customer",
- password: "google-auth", 
-  phone: "", 
-    });
-
-
-});
-
-
+    const token = generateToken(existUser._id, existUser.role);
+    res.redirect(`http://localhost:3000/sign-in?token=${token}`);
+  }  
+);
 
 export default router;

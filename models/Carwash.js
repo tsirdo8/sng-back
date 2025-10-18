@@ -7,6 +7,7 @@ const carwashSchema = new mongoose.Schema({
     lat: { type: Number },  
     lng: { type: Number }
   },
+  email: { type: String, required: true, unique: true },
   services: [
     {
       name: { type: String, required: true },  
