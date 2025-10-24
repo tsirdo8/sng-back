@@ -26,3 +26,4 @@ const carwashSchema = new mongoose.Schema({
 });
 
 export default mongoose.model("Carwash", carwashSchema);
+
