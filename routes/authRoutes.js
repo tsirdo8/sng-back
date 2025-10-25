@@ -130,16 +130,17 @@ router.get(
   async (req, res) => {
     console.log("Authenticated user:", req.user);
     let existUser = await User.findOne({ email: req.user.email });
-
-    if (!existUser)
-      existUser = await User.create({
-        name: req.user.fullName,
-        email: req.user.email,
-        avatar: req.user.avatar,
-        role: "customer",
-        password: "google-auth",
-        phone: "",
-      });
+if (!existUser) {
+  existUser = await User.create({
+    name: req.user.fullName,
+    email: req.user.email,
+    avatar: req.user.avatar,
+    role: "customer",
+    password: "google-auth",
+    phone: "",
+    carDetails: undefined, 
+  });
+}
 
     const token = generateToken(existUser._id, existUser.role);
     res.redirect(`http://localhost:3000/sign-in?token=${token}`);
