@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   carDetails: {
     make: { type: String },
     model: { type: String },
-    plateNumber: { type: String, unique: true, sparse: true },
+    plateNumber: { type: String},
   },
   role: { type: String, enum: ["customer", "admin"], default: "customer" },
   createdAt: { type: Date, default: Date.now },
