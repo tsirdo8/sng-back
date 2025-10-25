@@ -68,7 +68,8 @@ router.post("/signin/user", async (req, res) => {
 // -------------------- CARWASH SIGNUP --------------------
 router.post("/signup/carwash", async (req, res) => {
   try {
-    const { email, name, location, services, workingHours, password } = req.body;
+    const { email, name, location, services, workingHours, password } =
+      req.body;
 
     const exists = await Carwash.findOne({ name });
     if (exists)
@@ -142,11 +143,8 @@ router.get(
       });
 
     const token = generateToken(existUser._id, existUser.role);
-    res.redirect(`http://localhost:3000/sign-in?token=${token}`);
-  }  
+    res.redirect(`http://sng-back.vercel.app/sign-in?token=${token}`);
+  }
 );
-
-
-
 
 export default router;
